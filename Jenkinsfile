@@ -16,13 +16,15 @@ pipeline {
             }
         }
 
-        stage('Clone Repository') {
-            steps {
-                git branch: "${env.ACTUAL_BRANCH}",
-                    url: 'https://github.com/Golisir/JAVA-PROJECT.git'
-                 credentialsId: "${GIT_CREDENTIALS_ID}" // uncomment if needed
-            }
-        }
+    stage('Clone Repository') {
+        steps {
+            git(
+                branch: "${env.ACTUAL_BRANCH}",
+                url: 'https://github.com/Golisir/JAVA-PROJECT.git',
+                credentialsId: "${GIT_CREDENTIALS_ID}"
+        )
+    }
+}
 
         stage('Maven Build') {
             when {
