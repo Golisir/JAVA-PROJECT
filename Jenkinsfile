@@ -21,7 +21,7 @@ pipeline {
     stage('Clone Repository') {
       steps {
         git branch: "${env.ACTUAL_BRANCH}",
-            url: 'https://github.com/krishnasravi/kubernetes-demo.git',
+            url: 'https://github.com/Golisir/JAVA-PROJECT.git',
             credentialsId: "${GIT_CREDENTIALS_ID}"
       }
     }
