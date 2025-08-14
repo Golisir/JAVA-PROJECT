@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        APP_DIR = "app" // define APP_DIR if used later
-         GIT_CREDENTIALS_ID = "git-id" // uncomment if you use credentials
+        APP_DIR = "app"
+        GIT_CREDENTIALS_ID = "git-id"
     }
 
     stages {
@@ -16,15 +16,15 @@ pipeline {
             }
         }
 
-    stage('Clone Repository') {
-        steps {
-            git(
-                branch: "${env.ACTUAL_BRANCH}",
-                url: 'https://github.com/Golisir/JAVA-PROJECT.git',
-                credentialsId: "${GIT_CREDENTIALS_ID}"
-        )
-    }
-}
+        stage('Clone Repository') {
+            steps {
+                git(
+                    branch: "${env.ACTUAL_BRANCH}",
+                    url: 'https://github.com/Golisir/JAVA-PROJECT.git',
+                    credentialsId: "${GIT_CREDENTIALS_ID}"
+                )
+            }
+        }
 
         stage('Maven Build') {
             when {
@@ -33,6 +33,19 @@ pipeline {
             steps {
                 dir("${APP_DIR}") {
                     sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            when {
+                expression { return ['dev', 'uat', 'main'].contains(env.ACTUAL_BRANCH) }
+            }
+            steps {
+                dir("${APP_DIR}") {
+                    withSonarQubeEnv('My SonarQube') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=java-project -Dsonar.host.url=http://13.222.104.69:9000/'
+                    }
                 }
             }
         }
