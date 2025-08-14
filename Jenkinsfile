@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_DIR = "app"
         GIT_CREDENTIALS_ID = "git-id"
-        SCANNER_HOME= sonar-scanner
+        SCANNER_HOME= "sonar-scanner"
     }
 
     stages {
