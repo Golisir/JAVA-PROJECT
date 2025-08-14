@@ -27,17 +27,6 @@ pipeline {
             }
         }
 
-        stage('Maven Build') {
-            when {
-                expression { return ['dev', 'uat', 'main'].contains(env.ACTUAL_BRANCH) }
-            }
-            steps {
-                dir("${APP_DIR}") {
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
-
         stage('SonarQube Analysis') {
             when {
                 expression { return ['dev', 'uat', 'main'].contains(env.ACTUAL_BRANCH) }
@@ -47,6 +36,17 @@ pipeline {
                     withSonarQubeEnv('My SonarQube') {
                         sh 'mvn sonar:sonar -Dsonar.projectKey=java-project -Dsonar.host.url=http://13.222.104.69:9000/'
                     }
+                }
+            }
+        }
+
+        stage('Maven Build') {
+            when {
+                expression { return ['dev', 'uat', 'main'].contains(env.ACTUAL_BRANCH) }
+            }
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
