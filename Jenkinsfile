@@ -58,10 +58,12 @@ pipeline {
              stage('Build Docker Image') {
             steps {
                 script {
+                    dir("${APP_DIR}") {
                     docker.build("${env.ECR_REPO}:${env.IMAGE_TAG}")
                 }
             }
         }
+    }
 
         stage('Push to ECR') {
             steps {
