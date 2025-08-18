@@ -55,25 +55,24 @@ pipeline {
             }
         }
 
-        stages {
-        stage('Build Docker Image') {
+             stage('Build Docker Image') {
             steps {
                 script {
                     docker.build("${env.ECR_REPO}:${env.IMAGE_TAG}")
                 }
             }
         }
-            
+
         stage('Push to ECR') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
                     script {
                         def ecrRepo = "${env.AWS_ACCOUNT}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.IMAGE_TAG}"
-                        
+
                         sh """
                         aws ecr get-login-password --region ${env.AWS_REGION} \
                           | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT}.dkr.ecr.${env.AWS_REGION}.amazonaws.com
-                        
+
                         docker tag ${env.ECR_REPO}:${env.IMAGE_TAG} ${ecrRepo}
                         docker push ${ecrRepo}
                         """
@@ -81,4 +80,5 @@ pipeline {
                 }
             }
         }
+    }
 }
