@@ -5,10 +5,10 @@ pipeline {
         APP_DIR = "app"
         GIT_CREDENTIALS_ID = "git-id"
         SCANNER_HOME= "sonar-scanner"
-        AWS_REGION   = "us-east-1"  // change your region
-        AWS_ACCOUNT  = "559050204886" // change your AWS account ID
-        ECR_REPO     = "sankarrepository"  // change repo name
-        IMAGE_TAG    = "latest"       // or use ${env.BUILD_NUMBER}
+        AWS_REGION   = "us-east-1"  //region
+        AWS_ACCOUNT  = "559050204886" //AWS account ID
+        ECR_REPO     = "sankarrepository"  //repo name
+        IMAGE_TAG = "${BUILD_NUMBER}"       // or use ${env.BUILD_NUMBER}
     }
 
     stages {
